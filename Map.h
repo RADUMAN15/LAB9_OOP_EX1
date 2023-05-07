@@ -77,7 +77,8 @@ public:
 		for (int i = 0; i < size; i++)
 			if (array[i].key == key)
 			{
-				array[i] = value;
+				//array[i] = value;
+				array[i].value = value;
 				return true;
 			}
 
@@ -87,7 +88,8 @@ public:
 		
 		for (int i = 0; i < size; i++)
 			if (array[i].key == key)
-				array[i] = value;
+				array[i].value = value;
+				//array[i] = value;
 		
 	}
 	void print()
