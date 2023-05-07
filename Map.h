@@ -9,26 +9,16 @@ struct pair {
 template <typename T1,typename T2>
 class Map {
 private:
-	//pair<T1,T2> *array;
-	pair<T1,T2> array[100];
-	const int size = 100;
+	pair<T1,T2> *array;
+	int size = 1;
 	int index = 0;
 public:
 	Map() {
-		//array = new pair<T1,T2>[5];
+		array = new pair<T1,T2>[size];
 	};
-	//~Map() {
-	//	delete[]array;// = new pair<T1, T2>[size];
-	//};
-
-	/*Map(T2 value) {
-		if (index == size) {
-			printf("MAXSIZE has been reached");
-			return;
-		}
-		array[index++] = 0;
-
-	}*/
+	~Map() {
+		delete[]array;
+	};
 	T2& operator[](T1 key) {
 
 		bool exista = false;
@@ -44,12 +34,36 @@ public:
 		}
 		else
 		{
-			array[index].key = key;
-			if (index > 0)
-				array[index].ind = array[index - 1].ind + 1;
+			if (index + 1 <= size) {	///tb sa mai aloc spatiu
+				array[index].key = key;
+				if (index > 0)
+					array[index].ind = array[index - 1].ind + 1;
+				else
+					array[index].ind = 0;
+				return array[index++].value;
+			}
 			else
-				array[index].ind = 0;
-			return array[index++].value;
+			{
+				pair<T1, T2>* copy_array = new pair<T1, T2>[2 * size];
+				for (int i = 0; i < index; i++)
+					copy_array[i] = array[i];
+				delete[]array;
+
+				array = copy_array;
+				size *= 2;
+				array = new pair <T1, T2>[size];
+				for (int i = 0; i < index; i++)
+					array[i] = copy_array[i];
+
+				delete[]copy_array;
+
+				array[index].key = key;
+				if (index > 0)
+					array[index].ind = array[index - 1].ind + 1;
+				else
+					array[index].ind = 0;
+				return array[index++].value;
+			}
 		}
 	}
 	pair<T1,T2> *begin() {
@@ -106,7 +120,4 @@ public:
 				index--;
 			}
 	}
-	/*pair<T1, T2> operator auto(T1 key, T2 value, int index) {
-
-	}*/
 };
